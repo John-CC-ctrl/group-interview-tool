@@ -1,28 +1,59 @@
 import type { Session, SessionSummary } from './types';
 
-const BASE = '/api/sessions';
+// All data lives in localStorage — no backend required for static hosting
+const STORAGE_KEY = 'cobalt_clean_sessions_v1';
 
-async function request<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'Network error' }));
-    throw new Error(err.error || `HTTP ${res.status}`);
+function loadAll(): Record<string, Session> {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
   }
-  return res.json();
 }
 
-export const getSessions = (): Promise<SessionSummary[]> => request(BASE);
+function saveAll(sessions: Record<string, Session>): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+}
 
-export const getSession = (id: string): Promise<Session> => request(`${BASE}/${id}`);
+export const getSessions = (): Promise<SessionSummary[]> => {
+  const all = loadAll();
+  const summaries: SessionSummary[] = Object.values(all)
+    .map((s) => ({
+      id: s.id,
+      createdAt: s.createdAt,
+      seatCount: s.seatCount,
+      email: s.email,
+      concluded: s.concluded,
+    }))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  return Promise.resolve(summaries);
+};
 
-export const createSession = (session: Session): Promise<{ success: boolean }> =>
-  request(BASE, { method: 'POST', body: JSON.stringify(session) });
+export const getSession = (id: string): Promise<Session> => {
+  const all = loadAll();
+  const session = all[id];
+  if (!session) return Promise.reject(new Error('Session not found'));
+  return Promise.resolve(session);
+};
 
-export const updateSession = (session: Session): Promise<{ success: boolean }> =>
-  request(`${BASE}/${session.id}`, { method: 'PUT', body: JSON.stringify(session) });
+export const createSession = (session: Session): Promise<{ success: boolean }> => {
+  const all = loadAll();
+  all[session.id] = session;
+  saveAll(all);
+  return Promise.resolve({ success: true });
+};
 
-export const deleteSession = (id: string): Promise<{ success: boolean }> =>
-  request(`${BASE}/${id}`, { method: 'DELETE' });
+export const updateSession = (session: Session): Promise<{ success: boolean }> => {
+  const all = loadAll();
+  all[session.id] = session;
+  saveAll(all);
+  return Promise.resolve({ success: true });
+};
+
+export const deleteSession = (id: string): Promise<{ success: boolean }> => {
+  const all = loadAll();
+  delete all[id];
+  saveAll(all);
+  return Promise.resolve({ success: true });
+};
