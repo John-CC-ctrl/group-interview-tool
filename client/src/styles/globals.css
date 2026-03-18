@@ -1,0 +1,423 @@
+/* ============================================================
+   Cobalt Clean — Group Interview Tool
+   Dark Cobalt Theme
+   ============================================================ */
+
+:root {
+  /* Backgrounds */
+  --bg-app: #080c16;
+  --bg-surface: #0f1625;
+  --bg-card: #131d30;
+  --bg-card-hover: #192540;
+  --bg-elevated: #1a2847;
+  --bg-input: #0f1829;
+  --bg-overlay: rgba(8, 12, 22, 0.85);
+
+  /* Borders */
+  --border-subtle: #1e2e4a;
+  --border: #263a5c;
+  --border-active: #2d6ef5;
+
+  /* Text */
+  --text-primary: #e8edf8;
+  --text-secondary: #7a92b8;
+  --text-muted: #404d65;
+  --text-accent: #4f8eff;
+
+  /* Accent — Cobalt Blue */
+  --accent: #2d6ef5;
+  --accent-bright: #4f8eff;
+  --accent-dim: #1a4db5;
+  --accent-glow: rgba(45, 110, 245, 0.18);
+  --accent-glow-strong: rgba(45, 110, 245, 0.35);
+
+  /* Semantic colors */
+  --yellow: #f5a623;
+  --yellow-bg: rgba(245, 166, 35, 0.12);
+  --red: #e8394a;
+  --red-bg: rgba(232, 57, 74, 0.12);
+  --green: #17c47a;
+  --green-bg: rgba(23, 196, 122, 0.12);
+
+  /* Stars */
+  --star-filled: #f5a623;
+  --star-empty: #263a5c;
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+
+  /* Spacing */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.6);
+  --shadow-accent: 0 4px 20px rgba(45, 110, 245, 0.25);
+
+  /* Transitions */
+  --transition: 150ms ease;
+  --transition-med: 250ms ease;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-app);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ============ Typography ============ */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+/* ============ Scrollbar ============ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-active); }
+
+/* ============ Inputs ============ */
+input, textarea, select {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ============ Buttons ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-bright); box-shadow: var(--shadow-accent); }
+
+.btn-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--bg-card-hover); border-color: var(--accent); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+.btn-ghost:hover { background: var(--bg-card); color: var(--text-primary); }
+
+.btn-danger {
+  background: var(--red-bg);
+  color: var(--red);
+  border: 1px solid rgba(232, 57, 74, 0.3);
+}
+.btn-danger:hover { background: var(--red); color: #fff; }
+
+.btn-warn {
+  background: rgba(245, 166, 35, 0.15);
+  color: var(--yellow);
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}
+.btn-warn:hover { background: var(--yellow); color: #000; }
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ============ Cards ============ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.card-sm {
+  padding: 16px;
+  border-radius: var(--radius);
+}
+
+/* ============ Labels ============ */
+.label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* ============ Flag Dots ============ */
+.flag-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.flag-dot-yellow { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+.flag-dot-red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+.flag-dot-off { background: var(--border); }
+
+/* ============ Stars ============ */
+.stars {
+  display: flex;
+  gap: 3px;
+}
+
+.star {
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--star-empty);
+  transition: color var(--transition), transform var(--transition);
+  user-select: none;
+  line-height: 1;
+}
+
+.star.filled { color: var(--star-filled); }
+.star:hover { transform: scale(1.15); }
+
+.stars-sm .star { font-size: 0.75rem; }
+.stars-md .star { font-size: 1rem; }
+.stars-lg .star { font-size: 1.35rem; }
+
+/* ============ Average Rating Badge ============ */
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--star-filled);
+}
+
+/* ============ Tag / Badge ============ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid rgba(245, 166, 35, 0.3); }
+.badge-red { background: var(--red-bg); color: var(--red); border: 1px solid rgba(232, 57, 74, 0.3); }
+.badge-blue { background: var(--accent-glow); color: var(--accent-bright); border: 1px solid rgba(45, 110, 245, 0.3); }
+.badge-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(23, 196, 122, 0.3); }
+.badge-muted { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+
+/* ============ Divider ============ */
+.divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 20px 0;
+}
+
+/* ============ Tabs ============ */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 2px;
+}
+
+.tab-btn {
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--transition), border-color var(--transition);
+  font-family: var(--font-sans);
+  white-space: nowrap;
+}
+
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active {
+  color: var(--accent-bright);
+  border-bottom-color: var(--accent-bright);
+}
+
+/* ============ Cobalt Logo / Brand ============ */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: var(--shadow-accent);
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.brand-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ============ Loading / Empty States ============ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  color: var(--text-muted);
+  text-align: center;
+  gap: 12px;
+}
+
+.empty-state .empty-icon {
+  font-size: 3rem;
+  opacity: 0.4;
+}
+
+/* ============ Page layout ============ */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 16px;
+}
+
+.page-content {
+  flex: 1;
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============ Utility ============ */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.flex-1 { flex: 1; }
+.ml-auto { margin-left: auto; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+.text-accent { color: var(--accent-bright); }
+.fw-600 { font-weight: 600; }
+.w-full { width: 100%; }
+.mt-2 { margin-top: 8px; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-4 { margin-bottom: 16px; }
