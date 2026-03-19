@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import type { Session, Candidate } from '../types';
 import { RATING_CATEGORIES } from '../constants';
 import SeatingChart from './SeatingChart';
@@ -7,6 +7,7 @@ import CandidatePanel from './CandidatePanel';
 interface Props {
   session: Session;
   onUpdateCandidate: (id: string, updates: Partial<Candidate>) => void;
+  onAddCandidate: (name: string) => void;
   onConclude: () => void;
   onNewSession: () => void;
 }
@@ -49,10 +50,24 @@ function MiniCard({
   );
 }
 
-export default function InterviewView({ session, onUpdateCandidate, onConclude, onNewSession }: Props) {
+export default function InterviewView({ session, onUpdateCandidate, onAddCandidate, onConclude, onNewSession }: Props) {
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
   const [showPresentation, setShowPresentation] = useState(false);
   const [concludeConfirm, setConcludeConfirm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newName, setNewName] = useState('');
+  const addInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showAddForm) addInputRef.current?.focus();
+  }, [showAddForm]);
+
+  const handleAddCandidate = () => {
+    const name = newName.trim() || `Candidate ${session.candidates.length + 1}`;
+    onAddCandidate(name);
+    setNewName('');
+    setShowAddForm(false);
+  };
 
   const selectedCandidate = session.candidates.find((c) => c.id === selectedCandidateId) || null;
   const hasPresentation = Boolean(session.canvaUrl);
@@ -161,7 +176,34 @@ export default function InterviewView({ session, onUpdateCandidate, onConclude, 
           <div className="section-heading">
             <span className="section-label">Seating Chart</span>
             <span className="text-muted text-xs">Click a seat to open candidate panel</span>
+            <button
+              className="btn btn-ghost btn-sm add-candidate-btn"
+              onClick={() => setShowAddForm((v) => !v)}
+              title="Add a new candidate to this session"
+            >
+              {showAddForm ? '✕ Cancel' : '+ Add Candidate'}
+            </button>
           </div>
+
+          {showAddForm && (
+            <div className="add-candidate-form">
+              <input
+                ref={addInputRef}
+                type="text"
+                placeholder={`Seat ${session.candidates.length + 1} — candidate name`}
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleAddCandidate();
+                  if (e.key === 'Escape') { setShowAddForm(false); setNewName(''); }
+                }}
+                className="add-candidate-input"
+              />
+              <button className="btn btn-primary btn-sm" onClick={handleAddCandidate}>
+                Add →
+              </button>
+            </div>
+          )}
 
           <div className="seating-wrapper">
             <SeatingChart
@@ -420,6 +462,49 @@ export default function InterviewView({ session, onUpdateCandidate, onConclude, 
         .mini-flags {
           display: flex;
           gap: 3px;
+        }
+
+        /* Add Candidate */
+        .add-candidate-btn {
+          margin-left: auto;
+          font-size: 0.78rem;
+          padding: 4px 12px;
+          color: var(--accent-bright);
+          border-color: rgba(45,110,245,0.3);
+        }
+
+        .add-candidate-btn:hover {
+          background: var(--accent-glow);
+          border-color: var(--accent);
+        }
+
+        .add-candidate-form {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          margin-bottom: 16px;
+          padding: 12px 16px;
+          background: var(--bg-elevated);
+          border: 1px solid var(--accent);
+          border-radius: var(--radius);
+          animation: fadeIn 0.15s ease;
+          box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .add-candidate-input {
+          flex: 1;
+          font-size: 0.875rem;
+          padding: 8px 12px;
+          background: var(--bg-input);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-sm);
+          color: var(--text-primary);
+          outline: none;
+        }
+
+        .add-candidate-input:focus {
+          border-color: var(--accent);
+          box-shadow: 0 0 0 3px var(--accent-glow);
         }
       `}</style>
     </div>

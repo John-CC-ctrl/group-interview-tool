@@ -76,6 +76,24 @@ export default function App() {
     setScreen('interview');
   };
 
+  const addCandidate = useCallback(
+    (name: string) => {
+      setSession((prev) => {
+        if (!prev) return prev;
+        const nextSeat = prev.candidates.length + 1;
+        const newCandidate = makeCandidate(nextSeat, name);
+        const updated: Session = {
+          ...prev,
+          seatCount: nextSeat,
+          candidates: [...prev.candidates, newCandidate],
+        };
+        scheduleAutoSave(updated);
+        return updated;
+      });
+    },
+    [scheduleAutoSave]
+  );
+
   const updateCandidate = useCallback(
     (candidateId: string, updates: Partial<Candidate>) => {
       setSession((prev) => {
@@ -154,6 +172,7 @@ export default function App() {
       <InterviewView
         session={session}
         onUpdateCandidate={updateCandidate}
+        onAddCandidate={addCandidate}
         onConclude={concludeInterview}
         onNewSession={goToSetup}
       />
